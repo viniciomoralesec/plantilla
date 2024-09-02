@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ICliente } from '../Interfaces/icliente';
 import { ClientesService } from '../Services/clientes.service';
-import Swal from 'sweetalert2';
+//import Swal from 'sweetalert2';
 @Component({
   selector: 'app-clientes',
   standalone: true,

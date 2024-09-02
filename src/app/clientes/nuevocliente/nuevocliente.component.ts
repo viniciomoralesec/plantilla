@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validatio
 import { ClientesService } from 'src/app/Services/clientes.service';
 import { ICliente } from 'src/app/Interfaces/icliente';
 import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
+//import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({

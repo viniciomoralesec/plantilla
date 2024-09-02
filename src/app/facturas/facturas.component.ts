@@ -3,7 +3,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { IFactura } from '../Interfaces/factura';
 import { Router, RouterLink } from '@angular/router';
 import { FacturaService } from '../Services/factura.service';
-import Swal from 'sweetalert2';
+//import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-facturas',
