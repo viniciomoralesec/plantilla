@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-sm-12">
+    <app-card cardTitle="Lista de Facturas" blockClass="pc-component">
+      <div class="col-md-12 col-xl-8">
+        <h5 class="mb-3">
+          <a href="nuevafactura" class="btn btn-outline-dark">Nueva Factura</a>
+        </h5>
+        <div class="card tbl-card">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Factura</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Valor IVA</th>
+                  <th>Total</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let factura of listafacturas; index as i">
+                  <td>{{ i + 1 }}</td>
+                  <td>000{{ factura.idFactura }}</td>
+                  <td>{{ factura.Fecha }}</td>
+                  <td>{{ factura.Nombres }}</td>
+                  <td>{{ factura.Valor_IVA | currency }}</td>
+                  <td>{{ factura.total | currency }}</td>
+                  <td>
+                    <button type="button" class="btn btn-outline-success" [routerLink]="['/editarfactura/', factura.idFactura]">
+                      Editar
+                    </button>
+                    <button (click)="eliminar(factura.idFactura)" type="button" class="btn btn-outline-danger">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </app-card>
+  </div>
+</div>
