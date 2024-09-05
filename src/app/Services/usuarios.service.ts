@@ -13,7 +13,9 @@ export class UsuariosService {
   constructor(
     private lector: HttpClient,
     private navegacion: Router
-  ) {}
+  ) {
+    this.checkLoginStatus(); // Verificar el estado de inicio de sesión al iniciar el servicio
+  }
   login(usuario: IUsuarios) {
     let formData = new FormData();
     formData.append('Nombre_Usuario', usuario.Nombre_Usuario);
