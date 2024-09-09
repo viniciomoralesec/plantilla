@@ -61,7 +61,8 @@ const routes: Routes = [
       },
       {
         path: 'editarcliente/:idCliente',
-        loadComponent: () => import('./clientes/nuevocliente/nuevocliente.component').then((m) => m.NuevoclienteComponent),
+        loadComponent: () =>
+          import('./clientes/nuevocliente/nuevocliente.component').then((m) => m.NuevoclienteComponent),
         canActivate: [usuariosGuardGuard]
       },
       {

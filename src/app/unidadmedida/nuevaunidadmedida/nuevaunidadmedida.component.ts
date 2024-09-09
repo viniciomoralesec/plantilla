@@ -1,53 +1,52 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IUnidadMedida } from 'src/app/Interfaces/iunidadmedida';
-import { UnidadmedidaService } from '../../Services/unidadmedida.service';
-import { Router } from '@angular/router';
+import { IUnidadMedida } from '../Interfaces/iunidadmedida';
+import { RouterLink } from '@angular/router';
+import { SharedModule } from '../theme/shared/shared.module';
+import { UnidadmedidaService } from '../Services/unidadmedida.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-nuevaunidadmedida',
+  selector: 'app-unidadmedida',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule],
-  templateUrl: './nuevaunidadmedida.component.html',
-  styleUrl: './nuevaunidadmedida.component.scss'
+  imports: [RouterLink, SharedModule],
+  templateUrl: './unidadmedida.component.html',
+  styleUrl: './unidadmedida.component.scss'
 })
-export class NuevaunidadmedidaComponent implements OnInit {
-  titulo = 'Nueva Unidad de Medida';
-  frm_UnidadMedida: FormGroup;
+export class UnidadmedidaComponent implements OnInit {
+  listaunidades: IUnidadMedida[] = [];
 
-  idUnidadMedida = 0;
-  constructor(
-    private unidadService: UnidadmedidaService,
-    private navegacion: Router
-  ) {}
-
+  constructor(private unidadServicio: UnidadmedidaService) {}
   ngOnInit(): void {
-    this.frm_UnidadMedida = new FormGroup({
-      Detalle: new FormControl('', [Validators.required]),
-      Tipo: new FormControl('', [Validators.required])
-    });
+    this.listarUnidades();
   }
 
-  cambio(objetoSleect: any) {
-    this.frm_UnidadMedida.get('Tipo')?.setValue(objetoSleect.target.value);
+  listarUnidades() {
+    this.unidadServicio.todos().subscribe(data => {
+      this.listaunidades = data;
+      console.log(data);
+    })
   }
-  grabar() {
-    let unidadmedida: IUnidadMedida = {
-      Detalle: this.frm_UnidadMedida.get('Detalle')?.value,
-      Tipo: this.frm_UnidadMedida.get('Tipo')?.value
-    };
-    if (this.idUnidadMedida == 0) {
-      this.unidadService.insertar(unidadmedida).subscribe((x) => {
-        Swal.fire('Exito', 'La unidad de medida se grabo con exito', 'success');
-        this.navegacion.navigate(['/unidadmedida']);
-      });
-    } else {
-      unidadmedida.idUnidad_Medida = this.idUnidadMedida;
-      this.unidadService.actualizar(unidadmedida).subscribe((x) => {
-        Swal.fire('Exito', 'La unidad de medida se modifico con exito', 'success');
-        this.navegacion.navigate(['/unidadmedida']);
-      });
-    }
+  trackByFn() {}
+
+  eliminar(idUnidad_Medida: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará la unidad de medida',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then( result => {
+      if(result.isConfirmed) {
+        this.unidadServicio.eliminar(idUnidad_Medida).subscribe(data => {
+          this.listarUnidades();
+        });
+        Swal.fire('Eliminado', 'La unidad de medida ha sido eliminada', 'success');
+      } else {
+        Swal.fire('Error', 'Ocurrio un error', 'error');
+      }
+    })
   }
 }

@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 export class ClientesComponent {
   listaclientes: ICliente[] = [];
   constructor(private clienteServicio: ClientesService) {}
-
+                  
   ngOnInit() {
     this.cargatabla();
   }
@@ -32,7 +32,7 @@ export class ClientesComponent {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Emliminar Cliente'
+      confirmButtonText: 'Eliminar Cliente'
     }).then((result) => {
       if (result.isConfirmed) {
         this.clienteServicio.eliminar(idClientes).subscribe((data) => {
