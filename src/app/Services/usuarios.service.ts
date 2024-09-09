@@ -9,27 +9,31 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class UsuariosService {
   private loggedIn = new BehaviorSubject<boolean>(false);
-  apiurl = 'http://localhost/mvc/controllers/usuarios.controller.php?op=';
+  apiurl = 'http://localhost/MVC/controllers/usuarios.controller.php?op=';
   constructor(
     private lector: HttpClient,
     private navegacion: Router
   ) {
-    this.checkLoginStatus(); // Verificar el estado de inicio de sesión al iniciar el servicio
+    this.checkLoginStatus();
   }
   login(usuario: IUsuarios) {
     let formData = new FormData();
     formData.append('Nombre_Usuario', usuario.Nombre_Usuario);
     formData.append('Contrasenia', usuario.Contrasenia);
 
-    return this.lector.post<IUsuarios>(this.apiurl + 'login', formData).subscribe((respuesta) => {
-      if (respuesta) {
+    return this.lector.post<any>(this.apiurl + 'login', formData).subscribe((respuesta) => {
+      if (respuesta.success == 'true' || respuesta.idUsuarios > 0) {
         console.log(respuesta);
         //variables de entorno -- variables locales -- variables de sesion
+
         sessionStorage.setItem('nombreUsuario', respuesta.Nombre_Usuario);
         sessionStorage.setItem('rolesIdRoles', respuesta.Roles_idRoles.toString());
         localStorage.setItem('rolesIdRoles', respuesta.Roles_idRoles.toString());
         this.loggedIn.next(true);
         this.navegacion.navigate(['/dashboard/default']);
+      } else {
+        console.log(respuesta);
+        this.navegacion.navigate(['/login/' + respuesta.error]);
       }
     });
   }
@@ -42,8 +46,8 @@ export class UsuariosService {
     return this.loggedIn.asObservable();
   }
   checkLoginStatus() {
-    const usuario = sessionStorage.getItem('nombreUsuario');
-    if (usuario) {
+    const usuario = sessionStorage.getItem('rolesIdRoles');
+    if (parseInt(usuario) > 0) {
       this.loggedIn.next(true);
     }
   }
